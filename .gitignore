@@ -13,3 +13,7 @@ buildNumber.properties
 .classpath
 .project
 microprofile-config-keyvault/.settings
+
+*.idea/
+*.iml
+
