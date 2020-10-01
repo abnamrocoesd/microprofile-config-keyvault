@@ -1,0 +1,25 @@
+# ---- Define a trigger if needed
+trigger:
+  branches:
+    include:
+      - master # You need this to automatically trigger a release build on commit to master
+
+variables:
+- group: Abnamro.Coesd.VariableGroup.GlobalVars
+- group: TeamVars-COESD
+
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      name: 'GRD0001045/pita-pipeline-templates'
+
+stages:
+- stage: CI
+  jobs:
+    - template: flows/java-maven.yml@templates
+      parameters:
+        java_version: 1.8
+        # For multi module projects uncomment and set the following parameter to publish correctly to the pipeline:
+        # publish_pipeline_artifact: true
+        # publish_directory: '$(Build.SourcesDirectory)/FOLDER_CONTAINING_THE_EAR_MODULE/target'
