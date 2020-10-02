@@ -22,7 +22,7 @@ Firstly, add the dependency on this library to your project. Below are examples 
 compile group: 'com.abnamro.coesd.azure', name: 'microprofile-config-keyvault', version: '1.0.0'
 ```
 
-Once the dependency is added inside your MicroProfile-based application, you need to create a `microprofile-config.properties` file inside `src/main/resources/META-INF`. Inside this file, the following properties must be set based on the Azure Key Vault configuration you have created (if you haven't created an Azure Key Vault yet, refer to the [steps in my other repo](https://github.com/Azure-Samples/microprofile-configsource-keyvault)):
+After adding the dependency to your MicroProfile-based application, create a `microprofile-config.properties` file inside `src/main/resources/META-INF`. Inside this file, the following properties must be set based on the Azure Key Vault configuration you have created (if you haven't created an Azure Key Vault yet, refer to the [steps in my other repo](https://github.com/Azure-Samples/microprofile-configsource-keyvault)):
 
 ```properties
 # is the key vault name specified in step two, e.g. 'microprofile-kv'

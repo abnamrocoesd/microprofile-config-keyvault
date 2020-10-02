@@ -1,8 +1,6 @@
 package com.microsoft.azure.microprofile.config.keyvault;
 
-import com.azure.core.http.rest.PagedIterable;
 import com.azure.security.keyvault.secrets.SecretClient;
-import com.azure.security.keyvault.secrets.models.KeyVaultSecret;
 import com.azure.security.keyvault.secrets.models.SecretProperties;
 
 import java.util.Collections;
@@ -88,8 +86,8 @@ class AzureKeyVaultOperation {
       propertiesMap.clear();
       knownSecretKeys.clear();
 
-      PagedIterable<SecretProperties> knownSecrets = keyVaultClient.listPropertiesOfSecrets();
-      knownSecrets.stream()
+      keyVaultClient.listPropertiesOfSecrets()
+          .stream()
           .map(SecretProperties::getName)
           .forEach(knownSecretKeys::add);
       lastUpdateTime.set(System.currentTimeMillis());
