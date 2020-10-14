@@ -11,7 +11,7 @@
 
   <groupId>com.abnamro.coesd.azure</groupId>
   <artifactId>microprofile-config-keyvault</artifactId>
-  <version>0.0.20-SNAPSHOT</version>
+  <version>0.0.30-SNAPSHOT</version>
 
   <name>microprofile-config-keyvault</name>
 

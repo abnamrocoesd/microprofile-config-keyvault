@@ -12,7 +12,7 @@ Firstly, add the dependency on this library to your project. Below are examples 
 <dependency>
     <groupId>com.abnamro.coesd.azure</groupId>
     <artifactId>microprofile-config-keyvault</artifactId>
-    <version>0.0.20</version>
+    <version>0.0.30</version>
 </dependency>
 ```
 
