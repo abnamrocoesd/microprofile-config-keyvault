@@ -16,8 +16,7 @@ class AzureKeyVaultOperation {
 
   private static final long CACHE_REFRESH_INTERVAL_IN_MS = 1800000L; // 30 minutes
 
-  private final SecretClient keyVaultClient;
-  private final String vaultUri;
+  private final SecretClient secretKeyVaultClient;
 
   private final Set<String> knownSecretKeys;
   private final Map<String, String> propertiesMap;
@@ -25,17 +24,10 @@ class AzureKeyVaultOperation {
   private final AtomicLong lastUpdateTime = new AtomicLong();
   private final ReadWriteLock rwLock = new ReentrantReadWriteLock();
 
-  AzureKeyVaultOperation(SecretClient keyVaultClient, String vaultUri) {
-    this.keyVaultClient = keyVaultClient;
+  AzureKeyVaultOperation(SecretClient keyVaultClient) {
+    this.secretKeyVaultClient = keyVaultClient;
     this.propertiesMap = new ConcurrentHashMap<>();
     this.knownSecretKeys = new TreeSet<>();
-
-    vaultUri = vaultUri.trim();
-    if (vaultUri.endsWith("/")) {
-      vaultUri = vaultUri.substring(0, vaultUri.length() - 1);
-    }
-    this.vaultUri = vaultUri;
-
     createOrUpdateHashMap();
   }
 
@@ -66,7 +58,7 @@ class AzureKeyVaultOperation {
 
     if (knownSecretKeys.contains(secretName)) {
       return propertiesMap
-          .computeIfAbsent(secretName, key -> keyVaultClient.getSecret(vaultUri, key).getValue());
+          .computeIfAbsent(secretName, key -> secretKeyVaultClient.getSecret(secretName).getValue());
     }
 
     return null;
@@ -86,7 +78,7 @@ class AzureKeyVaultOperation {
       propertiesMap.clear();
       knownSecretKeys.clear();
 
-      keyVaultClient.listPropertiesOfSecrets()
+      secretKeyVaultClient.listPropertiesOfSecrets()
           .stream()
           .map(SecretProperties::getName)
           .forEach(knownSecretKeys::add);
@@ -96,4 +88,5 @@ class AzureKeyVaultOperation {
       rwLock.writeLock().unlock();
     }
   }
+
 }

@@ -12,7 +12,7 @@ Firstly, add the dependency on this library to your project. Below are examples 
 <dependency>
     <groupId>com.abnamro.coesd.azure</groupId>
     <artifactId>microprofile-config-keyvault</artifactId>
-    <version>1.0.0</version>
+    <version>0.0.20</version>
 </dependency>
 ```
 
@@ -26,7 +26,9 @@ After adding the dependency to your MicroProfile-based application, create a `mi
 
 ```properties
 # is the key vault name specified in step two, e.g. 'microprofile-kv'
-azure.keyvault.url=https://microprofile-kv.vault.azure.net
+azure.keyvault.url=https://cicd-kv.vault.azure.net
+azure.keyvault.enabled=true
+# NOTE that, by default azure.keyvault.enabled is always true, if for local you want to disable it, make it false
 ```
 
 Save this file, and then we can move on to your REST endpoints. Again, the [keyvault-configsource sample app](https://github.com/Azure-Samples/microprofile-configsource-keyvault) has good reference code, but I have reproduced it below:

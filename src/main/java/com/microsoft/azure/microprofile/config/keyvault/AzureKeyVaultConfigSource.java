@@ -3,6 +3,8 @@ package com.microsoft.azure.microprofile.config.keyvault;
 import com.azure.identity.ManagedIdentityCredentialBuilder;
 import com.azure.security.keyvault.secrets.SecretClient;
 import com.azure.security.keyvault.secrets.SecretClientBuilder;
+import java.util.HashMap;
+import java.util.HashSet;
 import org.eclipse.microprofile.config.Config;
 import org.eclipse.microprofile.config.ConfigProvider;
 import org.eclipse.microprofile.config.spi.ConfigSource;
@@ -12,37 +14,62 @@ import java.util.Set;
 
 public class AzureKeyVaultConfigSource implements ConfigSource {
 
+  public static final String FALSE = "false";
   private AzureKeyVaultOperation keyVaultOperation;
+
+  private String keyVaultConfigValue;
 
   public AzureKeyVaultConfigSource() {
     // no-op
   }
 
   private void init() {
-      if (keyVaultOperation != null) {
-          return;
-      }
+    if (keyVaultOperation != null) {
+      return;
+    }
+    Config config = ConfigProvider.getConfig();
+
+    if (isKeyVaultDisabled(config)) {
+      return;
+    }
 
     // read in keyvault config settings from external config source (normally the environment or a microprofile-config.properties file)
-    Config config = ConfigProvider.getConfig();
     String keyvaultURL = config.getValue("azure.keyvault.url", String.class);
 
     // create the keyvault client
     SecretClient secretClient = new SecretClientBuilder().vaultUrl(keyvaultURL)
         .credential(new ManagedIdentityCredentialBuilder().build()).buildClient();
 
-    keyVaultOperation = new AzureKeyVaultOperation(secretClient, keyvaultURL);
+    keyVaultOperation = new AzureKeyVaultOperation(secretClient);
+  }
+
+
+  /**
+   * Returns true if keyvault is disabled Default is always false, which imples keyvault is enabled
+   * by default
+   *
+   * @return
+   */
+  private boolean isKeyVaultDisabled(Config config) {
+    this.keyVaultConfigValue = config.getValue("azure.keyvault.enabled", String.class);
+    return FALSE.equalsIgnoreCase(keyVaultConfigValue);
   }
 
   @Override
   public Map<String, String> getProperties() {
     init();
+    if (FALSE.equalsIgnoreCase(keyVaultConfigValue)) {
+      return new HashMap<>();
+    }
     return keyVaultOperation.getProperties();
   }
 
   @Override
   public String getValue(String key) {
     init();
+    if (FALSE.equalsIgnoreCase(keyVaultConfigValue)) {
+      return null;
+    }
     return keyVaultOperation.getValue(key);
   }
 
@@ -54,6 +81,9 @@ public class AzureKeyVaultConfigSource implements ConfigSource {
   @Override
   public Set<String> getPropertyNames() {
     init();
+    if (FALSE.equalsIgnoreCase(keyVaultConfigValue)) {
+      return new HashSet<>();
+    }
     return keyVaultOperation.getKeys();
   }
 
