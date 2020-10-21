@@ -17,7 +17,7 @@ public class AzureKeyVaultConfigSource implements ConfigSource {
   public static final String FALSE = "false";
   private AzureKeyVaultOperation keyVaultOperation;
 
-  private String keyVaultConfigValue;
+  private String configIsKeyVaultEnabled;
 
   public AzureKeyVaultConfigSource() {
     // no-op
@@ -51,14 +51,14 @@ public class AzureKeyVaultConfigSource implements ConfigSource {
    * @return
    */
   private boolean isKeyVaultDisabled(Config config) {
-    this.keyVaultConfigValue = config.getValue("azure.keyvault.enabled", String.class);
-    return FALSE.equalsIgnoreCase(keyVaultConfigValue);
+    this.configIsKeyVaultEnabled = config.getValue("azure.keyvault.enabled", String.class);
+    return FALSE.equalsIgnoreCase(configIsKeyVaultEnabled);
   }
 
   @Override
   public Map<String, String> getProperties() {
     init();
-    if (FALSE.equalsIgnoreCase(keyVaultConfigValue)) {
+    if (FALSE.equalsIgnoreCase(configIsKeyVaultEnabled)) {
       return new HashMap<>();
     }
     return keyVaultOperation.getProperties();
@@ -67,7 +67,7 @@ public class AzureKeyVaultConfigSource implements ConfigSource {
   @Override
   public String getValue(String key) {
     init();
-    if (FALSE.equalsIgnoreCase(keyVaultConfigValue)) {
+    if (FALSE.equalsIgnoreCase(configIsKeyVaultEnabled)) {
       return null;
     }
     return keyVaultOperation.getValue(key);
@@ -81,7 +81,7 @@ public class AzureKeyVaultConfigSource implements ConfigSource {
   @Override
   public Set<String> getPropertyNames() {
     init();
-    if (FALSE.equalsIgnoreCase(keyVaultConfigValue)) {
+    if (FALSE.equalsIgnoreCase(configIsKeyVaultEnabled)) {
       return new HashSet<>();
     }
     return keyVaultOperation.getKeys();
