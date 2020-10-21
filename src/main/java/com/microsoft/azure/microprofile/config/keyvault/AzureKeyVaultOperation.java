@@ -58,7 +58,8 @@ class AzureKeyVaultOperation {
 
     if (knownSecretKeys.contains(secretName)) {
       return propertiesMap
-          .computeIfAbsent(secretName, key -> secretKeyVaultClient.getSecret(secretName).getValue());
+          .computeIfAbsent(secretName,
+              key -> secretKeyVaultClient.getSecret(secretName).getValue());
     }
 
     return null;

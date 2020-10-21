@@ -45,8 +45,8 @@ public class AzureKeyVaultConfigSource implements ConfigSource {
 
 
   /**
-   * Returns true if keyvault is disabled Default is always false, which imples keyvault is enabled
-   * by default
+   * Returns true if keyvault is disabled. Default is always false, which implies keyvault is
+   * enabled by default
    *
    * @return
    */
