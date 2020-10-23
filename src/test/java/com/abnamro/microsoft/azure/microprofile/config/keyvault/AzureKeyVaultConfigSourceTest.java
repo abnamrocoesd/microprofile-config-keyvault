@@ -1,4 +1,4 @@
-package com.microsoft.azure.microprofile.config.keyvault;
+package com.abnamro.microsoft.azure.microprofile.config.keyvault;
 
 import java.util.Arrays;
 import java.util.HashMap;

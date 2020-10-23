@@ -1,4 +1,4 @@
-package com.microsoft.azure.microprofile.config.keyvault;
+package com.abnamro.microsoft.azure.microprofile.config.keyvault;
 
 import com.azure.security.keyvault.secrets.SecretClient;
 import com.azure.security.keyvault.secrets.models.SecretProperties;
