@@ -5,16 +5,28 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import org.eclipse.microprofile.config.ConfigProvider;
+import org.jboss.weld.junit5.auto.AddExtensions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.jboss.weld.junit5.EnableWeld;
+
 
 import static org.mockito.Mockito.*;
 
+@EnableWeld
+@AddExtensions({org.apache.geronimo.config.cdi.ConfigExtension.class})
 class AzureKeyVaultConfigSourceTest {
+
+  @Test
+  void test() {
+    Assertions
+        .assertEquals("lookup value", ConfigProvider.getConfig().getValue("value", String.class));
+  }
 
   @Mock
   AzureKeyVaultOperation keyVaultOperation;
@@ -57,7 +69,7 @@ class AzureKeyVaultConfigSourceTest {
     when(keyVaultOperation.getKeys()).thenReturn(new HashSet<>(Arrays.asList("String")));
 
     Set<String> result = azureKeyVaultConfigSource.getPropertyNames();
-    Assertions.assertEquals(new HashSet<String>(Arrays.asList("String")), result);
+    Assertions.assertEquals(new HashSet<>(Arrays.asList("String")), result);
   }
 
   @Test
