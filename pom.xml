@@ -23,7 +23,7 @@
   <licenses>
     <license>
       <name>MIT</name>
-      <url>https://github.com/abnamrocoesd/microprofile-config-keyvault/LICENSE</url>
+      <url>https://github.com/abnamrocoesd/microprofile-config-keyvault/blob/main/LICENSE</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
@@ -117,6 +117,14 @@
       <artifactId>geronimo-config-impl</artifactId>
       <version>1.2.2</version>
       <scope>test</scope>
+    </dependency>
+
+    <!-- provided scope to exclude packages having NexusIQ violations -->
+    <dependency>
+      <groupId>org.simpleframework</groupId>
+      <artifactId>simple-xml</artifactId>
+      <version>2.7.1</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 
