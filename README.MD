@@ -2,6 +2,9 @@
 
 This project contains a config source for the MicroProfile Config API. It allows for dependency injection of values from Azure Key Vault into MicroProfile-based microservices.
 
+The authentication mechanism with Azure Key Vault is by using Managed Service Identity (MSI).
+For more details on configuring MSI refer : [Azure KeyVault with MSI](https://docs.microsoft.com/en-us/samples/azure-samples/app-service-msi-keyvault-dotnet/keyvault-msi-appservice-sample/)
+
 ## Using the Azure Key Vault Config Source for MicroProfile Config API
 
 Firstly, add the dependency on this library to your project. Below are examples of how to do this in Maven and Gradle:
@@ -12,7 +15,7 @@ Firstly, add the dependency on this library to your project. Below are examples 
 <dependency>
     <groupId>com.abnamro.coesd.azure</groupId>
     <artifactId>microprofile-config-keyvault</artifactId>
-    <version>0.0.30</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
@@ -31,7 +34,7 @@ azure.keyvault.enabled=true
 # NOTE that, by default azure.keyvault.enabled is always true, if for local you want to disable it, make it false
 ```
 
-Save this file, and then we can move on to your REST endpoints. Again, the [keyvault-configsource sample app](https://github.com/Azure-Samples/microprofile-configsource-keyvault) has good reference code, but I have reproduced it below:
+Save this file, and then we can move on to your REST endpoints. 
 
 ```java
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -64,4 +67,9 @@ public class ConfigDemo {
                 + "By the way, I can also look it up in a non-DI fashion: '" + config.getValue("demo-key", String.class) + "'";
     }
 }
+```
+This library has been tested with OpenLiberty v20.0.0.11
+with the following feature added to enable microprofile
+```xml
+ <feature>microProfile-3.3</feature>
 ```

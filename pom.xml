@@ -5,11 +5,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>com.abnamro.coesd</groupId>
+    <groupId>com.abnamro.coesd.public</groupId>
     <artifactId>master-pom</artifactId>
-    <version>3.1.0</version>
+    <version>2.0.0</version>
   </parent>
-
   <groupId>com.abnamro.coesd.azure</groupId>
   <artifactId>microprofile-config-keyvault</artifactId>
   <version>0.0.50-SNAPSHOT</version>
@@ -23,8 +22,8 @@
   <inceptionYear>2020</inceptionYear>
   <licenses>
     <license>
-      <name>The Apache Software License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <name>MIT</name>
+      <url>https://github.com/abnamrocoesd/microprofile-config-keyvault/LICENSE</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
@@ -36,8 +35,8 @@
     </developer>
   </developers>
   <scm>
-    <connection>https://github.com/abnamrocoesd/microprofile-config-keyvault</connection>
-    <developerConnection>https://github.com/abnamrocoesd/microprofile-config-keyvault
+    <connection>scm:git:git@github.com:abnamrocoesd/microprofile-config-keyvault.git</connection>
+    <developerConnection>scm:git:git@github.com:abnamrocoesd/microprofile-config-keyvault
     </developerConnection>
     <url>https://github.com/abnamrocoesd/microprofile-config-keyvault</url>
   </scm>
@@ -120,54 +119,5 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <version>3.2.1</version>
-        <executions>
-          <execution>
-            <id>attach-sources</id>
-            <goals>
-              <goal>jar-no-fork</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.2.0</version>
-        <configuration>
-          <detectJavaApiLink>false</detectJavaApiLink>
-        </configuration>
-        <executions>
-          <execution>
-            <id>attach-javadocs</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-<!--      <plugin>-->
-<!--        <groupId>org.apache.maven.plugins</groupId>-->
-<!--        <artifactId>maven-gpg-plugin</artifactId>-->
-<!--        <version>1.6</version>-->
-<!--        <executions>-->
-<!--          <execution>-->
-<!--            <id>sign-artifacts</id>-->
-<!--            <phase>verify</phase>-->
-<!--            <goals>-->
-<!--              <goal>sign</goal>-->
-<!--            </goals>-->
-<!--          </execution>-->
-<!--        </executions>-->
-<!--      </plugin>-->
-    </plugins>
-  </build>
-
 
 </project>
