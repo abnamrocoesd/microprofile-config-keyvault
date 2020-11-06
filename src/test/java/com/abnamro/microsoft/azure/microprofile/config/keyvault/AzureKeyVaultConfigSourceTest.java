@@ -1,6 +1,7 @@
 package com.abnamro.microsoft.azure.microprofile.config.keyvault;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -69,7 +70,7 @@ class AzureKeyVaultConfigSourceTest {
     when(keyVaultOperation.getKeys()).thenReturn(new HashSet<>(Arrays.asList("String")));
 
     Set<String> result = azureKeyVaultConfigSource.getPropertyNames();
-    Assertions.assertEquals(new HashSet<>(Arrays.asList("String")), result);
+    Assertions.assertEquals(new HashSet<>(Collections.singletonList("String")), result);
   }
 
   @Test

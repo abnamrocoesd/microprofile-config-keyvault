@@ -10,7 +10,6 @@ import java.util.Set;
 
 public class AzureKeyVaultConfigSource implements ConfigSource {
 
-  public static final String FALSE = "false";
   private AzureKeyVaultOperation keyVaultOperation;
 
   // true by default
