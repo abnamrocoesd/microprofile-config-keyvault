@@ -1,6 +1,8 @@
 package com.abnamro.microsoft.azure.microprofile.config.keyvault;
 
+import com.azure.identity.ManagedIdentityCredentialBuilder;
 import com.azure.security.keyvault.secrets.SecretClient;
+import com.azure.security.keyvault.secrets.SecretClientBuilder;
 import com.azure.security.keyvault.secrets.models.SecretProperties;
 
 import java.util.Collections;
@@ -11,6 +13,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import org.eclipse.microprofile.config.ConfigProvider;
+
 
 class AzureKeyVaultOperation {
 
@@ -18,17 +22,16 @@ class AzureKeyVaultOperation {
 
   private final SecretClient secretKeyVaultClient;
 
-  private final Set<String> knownSecretKeys;
-  private final Map<String, String> propertiesMap;
+  private final Set<String> knownSecretKeys = new TreeSet<>();
+  private final Map<String, String> propertiesMap = new ConcurrentHashMap<>();
 
   private final AtomicLong lastUpdateTime = new AtomicLong();
   private final ReadWriteLock rwLock = new ReentrantReadWriteLock();
 
-  AzureKeyVaultOperation(SecretClient keyVaultClient) {
-    this.secretKeyVaultClient = keyVaultClient;
-    this.propertiesMap = new ConcurrentHashMap<>();
-    this.knownSecretKeys = new TreeSet<>();
-    createOrUpdateHashMap();
+  AzureKeyVaultOperation() {
+    String keyVaultURL = ConfigProvider.getConfig().getValue("azure.keyvault.url", String.class);
+    this.secretKeyVaultClient = new SecretClientBuilder().vaultUrl(keyVaultURL)
+        .credential(new ManagedIdentityCredentialBuilder().build()).buildClient();
   }
 
   Set<String> getKeys() {
