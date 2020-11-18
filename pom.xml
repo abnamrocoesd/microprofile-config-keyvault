@@ -101,6 +101,7 @@
       <groupId>org.jboss.weld.module</groupId>
       <artifactId>weld-web</artifactId>
       <version>${version.weld.web}</version>
+      <scope>test</scope>
     </dependency>
     <!-- END REQUIREMENTS FOR WELD USAGE -->
     <!-- START REQUIREMENTS FOR WELD-UNIT USAGE WITH JUNIT 5 -->
