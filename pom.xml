@@ -9,7 +9,7 @@
   </parent>
   <groupId>com.abnamro.coesd.azure</groupId>
   <artifactId>microprofile-config-keyvault</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2-SNAPSHOT</version>
   <name>microprofile-config-keyvault</name>
   <packaging>jar</packaging>
 
@@ -37,7 +37,7 @@
     <developerConnection>scm:git:git@github.com:abnamrocoesd/microprofile-config-keyvault
     </developerConnection>
     <url>https://github.com/abnamrocoesd/microprofile-config-keyvault</url>
-    <tag>microprofile-config-keyvault-1.0.1</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <properties>
