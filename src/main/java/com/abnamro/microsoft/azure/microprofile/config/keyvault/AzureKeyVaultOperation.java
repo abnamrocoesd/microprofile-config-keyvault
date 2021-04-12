@@ -76,11 +76,17 @@ class AzureKeyVaultOperation {
   String getValue(String secretName) {
     checkRefreshTimeOut();
 
-    if (knownSecretKeys.contains(secretName)) {
-      return propertiesMap
-          .computeIfAbsent(secretName,
-              key -> secretKeyVaultClient.getSecret(secretName).getValue());
+    try {
+      rwLock.readLock().lock();
+      if (knownSecretKeys.contains(secretName)) {
+        return propertiesMap
+                .computeIfAbsent(secretName,
+                        key -> secretKeyVaultClient.getSecret(secretName).getValue());
+      }
+    } finally {
+      rwLock.readLock().unlock();
     }
+
 
     return null;
   }
