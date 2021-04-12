@@ -119,6 +119,13 @@
       <scope>test</scope>
     </dependency>
 
+    <dependency>
+      <groupId>com.azure</groupId>
+      <artifactId>azure-core-test</artifactId>
+      <version>1.5.0</version>
+      <scope>test</scope>
+    </dependency>
+
     <!-- provided scope to exclude packages having NexusIQ violations -->
     <dependency>
       <groupId>org.simpleframework</groupId>
