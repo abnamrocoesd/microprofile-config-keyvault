@@ -1,9 +1,10 @@
 package com.abnamro.microsoft.azure.microprofile.config.keyvault;
 
-import com.azure.identity.ManagedIdentityCredentialBuilder;
+import com.azure.identity.DefaultAzureCredentialBuilder;
 import com.azure.security.keyvault.secrets.SecretClient;
 import com.azure.security.keyvault.secrets.SecretClientBuilder;
 import com.azure.security.keyvault.secrets.models.SecretProperties;
+import org.eclipse.microprofile.config.ConfigProvider;
 
 import java.util.Collections;
 import java.util.Map;
@@ -13,12 +14,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import org.eclipse.microprofile.config.ConfigProvider;
 
 
 class AzureKeyVaultOperation {
 
-  private static final long CACHE_REFRESH_INTERVAL_IN_MS = 1800000L; // 30 minutes
+  private static final long DEFAULT_CACHE_REFRESH_INTERVAL_IN_MS = 1800000L; // 30 minutes
+
+  private final long cacheRefreshIntervalInMs; // 30 minutes
 
   private final SecretClient secretKeyVaultClient;
 
@@ -29,9 +31,24 @@ class AzureKeyVaultOperation {
   private final ReadWriteLock rwLock = new ReentrantReadWriteLock();
 
   AzureKeyVaultOperation() {
-    String keyVaultURL = ConfigProvider.getConfig().getValue("azure.keyvault.url", String.class);
-    this.secretKeyVaultClient = new SecretClientBuilder().vaultUrl(keyVaultURL)
-        .credential(new ManagedIdentityCredentialBuilder().build()).buildClient();
+    this(DEFAULT_CACHE_REFRESH_INTERVAL_IN_MS);
+  }
+  AzureKeyVaultOperation(long cacheRefreshIntervalInMs) {
+    this(cacheRefreshIntervalInMs, defaultSecretKeyVaultClient());
+  }
+
+  AzureKeyVaultOperation(long cacheRefreshIntervalInMs, SecretClient secretKeyVaultClient) {
+    this.cacheRefreshIntervalInMs = cacheRefreshIntervalInMs;
+    this.secretKeyVaultClient = secretKeyVaultClient;
+  }
+
+  private static SecretClient defaultSecretKeyVaultClient() {
+    return new SecretClientBuilder().vaultUrl(getKeyVaultUrlFromConfig())
+            .credential(new DefaultAzureCredentialBuilder().build()).buildClient();
+  }
+
+  private static String getKeyVaultUrlFromConfig() {
+    return ConfigProvider.getConfig().getValue("azure.keyvault.url", String.class);
   }
 
   Set<String> getKeys() {
@@ -59,18 +76,24 @@ class AzureKeyVaultOperation {
   String getValue(String secretName) {
     checkRefreshTimeOut();
 
-    if (knownSecretKeys.contains(secretName)) {
-      return propertiesMap
-          .computeIfAbsent(secretName,
-              key -> secretKeyVaultClient.getSecret(secretName).getValue());
+    try {
+      rwLock.readLock().lock();
+      if (knownSecretKeys.contains(secretName)) {
+        return propertiesMap
+                .computeIfAbsent(secretName,
+                        key -> secretKeyVaultClient.getSecret(secretName).getValue());
+      }
+    } finally {
+      rwLock.readLock().unlock();
     }
+
 
     return null;
   }
 
   private void checkRefreshTimeOut() {
     // refresh periodically
-    if (System.currentTimeMillis() - lastUpdateTime.get() > CACHE_REFRESH_INTERVAL_IN_MS) {
+    if (System.currentTimeMillis() - lastUpdateTime.get() > cacheRefreshIntervalInMs) {
       lastUpdateTime.set(System.currentTimeMillis());
       createOrUpdateHashMap();
     }
