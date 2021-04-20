@@ -15,14 +15,14 @@ Firstly, add the dependency on this library to your project. Below are examples 
 <dependency>
     <groupId>com.abnamro.coesd.azure</groupId>
     <artifactId>microprofile-config-keyvault</artifactId>
-    <version>1.0.1</version>
+    <version>1.1.1</version>
 </dependency>
 ```
 
 **Gradle:**
 
 ```gradle
-compile group: 'com.abnamro.coesd.azure', name: 'microprofile-config-keyvault', version: '1.0.1'
+compile group: 'com.abnamro.coesd.azure', name: 'microprofile-config-keyvault', version: '1.1.1'
 ```
 
 After adding the dependency to your MicroProfile-based application, create a `microprofile-config.properties` file inside `src/main/resources/META-INF`. Inside this file, the following properties must be set based on the Azure Key Vault configuration you have created 
